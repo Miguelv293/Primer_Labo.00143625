@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int numero;
+
+    cout << "Ingrese un numero: ";
+    cin >> numero;
+
+    cout << "Los numeros del 1 hasta " << numero << " son:" << endl;
+
+    // Bucle for que imprime desde 1 hasta el número ingresado
+    for (int i = 1; i <= numero; i++) {
+        cout << i << " ";
+    }
+
+    cout << endl; // salto de línea final
+
+    return 0;
+}
