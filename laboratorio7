@@ -1,0 +1,127 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+vector<int> leerArchivo(const string &nombreArchivo);
+void escribirArchivo(const string &nombreArchivo, const vector<int> &numeros);
+void clasificarNumeros(const string &entrada, const string &pares, const string &impares);
+void ordenarArchivo(const string &nombreArchivo);
+void mostrarArchivo(const string &nombreArchivo);
+
+
+vector<int> leerArchivo(const string &nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    vector<int> numeros;
+    int num;
+
+    if (!archivo) {
+        cout << "Error al abrir " << nombreArchivo << endl;
+        return numeros;
+    }
+
+    while (archivo >> num) {
+        numeros.push_back(num);
+    }
+
+    archivo.close();
+    return numeros;
+}
+
+void escribirArchivo(const string &nombreArchivo, const vector<int> &numeros) {
+    ofstream archivo(nombreArchivo);
+
+    for (int n : numeros) {
+        archivo << n << endl;
+    }
+
+    archivo.close();
+}
+
+void clasificarNumeros(const string &entrada, const string &pares, const string &impares) {
+    vector<int> datos = leerArchivo(entrada);
+    vector<int> listaPares, listaImpares;
+
+    for (int n : datos) {
+        if (n % 2 == 0)
+            listaPares.push_back(n);
+        else
+            listaImpares.push_back(n);
+    }
+
+    escribirArchivo(pares, listaPares);
+    escribirArchivo(impares, listaImpares);
+
+    cout << "\nClasificación completada.\n";
+}
+
+void ordenarArchivo(const string &nombreArchivo) {
+    vector<int> datos = leerArchivo(nombreArchivo);
+
+    cout << "\nAntes de ordenar (" << nombreArchivo << "): ";
+    for (int n : datos) cout << n << " ";
+    cout << endl;
+
+    for (int i = 0; i < datos.size() - 1; i++) {
+        for (int j = 0; j < datos.size() - i - 1; j++) {
+            if (datos[j] > datos[j+1]) {
+                int temp = datos[j];
+                datos[j] = datos[j+1];
+                datos[j+1] = temp;
+            }
+        }
+    }
+
+    escribirArchivo(nombreArchivo, datos);
+
+    cout << "Después de ordenar: ";
+    for (int n : datos) cout << n << " ";
+    cout << endl;
+}
+
+void mostrarArchivo(const string &nombreArchivo) {
+    vector<int> datos = leerArchivo(nombreArchivo);
+
+    cout << "\nContenido de " << nombreArchivo << ": ";
+    for (int n : datos) cout << n << " ";
+    cout << endl;
+}
+
+int main() {
+    int opcion;
+
+    do {
+        cout << "\n===== MENU PRINCIPAL =====" << endl;
+        cout << "1. Clasificar numeros" << endl;
+        cout << "2. Ordenar archivo de pares" << endl;
+        cout << "3. Ordenar archivo de impares" << endl;
+        cout << "4. Ver resultados" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Seleccione opcion: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1:
+            clasificarNumeros("datos.txt", "pares.txt", "impares.txt");
+            break;
+        case 2:
+            ordenarArchivo("pares.txt");
+            break;
+        case 3:
+            ordenarArchivo("impares.txt");
+            break;
+        case 4:
+            mostrarArchivo("pares.txt");
+            mostrarArchivo("impares.txt");
+            break;
+        case 0:
+            cout << "Saliendo..." << endl;
+            break;
+        default:
+            cout << "Opción no válida." << endl;
+        }
+
+    } while (opcion != 0);
+
+    return 0;
+}
